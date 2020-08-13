@@ -1,0 +1,301 @@
+
+<!-- saved from url=(0035)http://cchm86.com/what-IS-Sine.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>What IS Sine</title>
+<meta name="Generator" content="SciTE - www.Scintilla.org">
+<style type="text/css">
+.S0 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	font-size: 13pt;
+}
+.S1 {
+	color: #000080;
+}
+.S3 {
+	color: #008080;
+}
+.S6 {
+	color: #7F007F;
+}
+.S8 {
+	color: #800080;
+}
+span {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	font-size: 12pt;
+}
+.S40 {
+	color: #7F7F00;
+}
+.S41 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S43 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #007F00;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S45 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #007F7F;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S46 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S47 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #00007F;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S50 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+</style>
+</head>
+<body bgcolor="#FFFFFF">
+<a href="http://cchm86.com/">Home</a>
+
+<script type="text/javascript">
+// written by: Crailin Mogged //
+// This program shows the operations that make up the sine function.
+function main()
+{
+   var inputAngle = parseFloat(sinInput.value);
+   
+   var lgSinOutput = 1, smSinOutput = 0, midSinOutput;
+   var lgSlope = 0, smSlope = 1, midSlope;
+   var lgAngle = 90, smAngle = 0, midAngle;
+   
+   var A,B,C,D,E,F,G,H,I;
+   var J = 1, K = 1;
+   
+   var lgHeight, midHeight, smHeight;
+   var lgHghtMinusK, smHghtPlusK;
+   
+   var i;
+   
+   var lessThanZero = 0;
+   
+   if (inputAngle % 360 > 180)
+   lessThanZero = 1;
+   if ((inputAngle % 360 > -180) && (inputAngle % 360 < 0))
+   lessThanZero = 1;
+   if (inputAngle < 0)
+   inputAngle = -inputAngle;
+   
+   inputAngle = inputAngle % 180;
+   if (inputAngle > 90)
+   inputAngle = 90 - (inputAngle - 90);
+   
+   for (i = 0; i < 16; i++) // The number of loops is equal to 16
+   {                        // The more loops, the more accurate
+      // This is the formula found in "./Deriving Pi.html"
+      A = J * 2;
+      B = Math.sqrt(A);
+      C = B - 1;
+      D = 1 / K;
+      K = C * D;
+      
+      E = 1 - K;
+      F = E / 2;
+      G = F + K;
+      H = G * F;
+      I = H * 2;
+      J = 1 - I;
+      
+      lgHeight = lgSinOutput + (1 - lgSinOutput) / 2;
+      lgHghtMinusK = lgHeight - K * lgSlope / 2;
+      
+      smHeight = smSinOutput + (1 - smSinOutput) / 2;
+      smHghtPlusK = smHeight + K * smSlope / 2;
+      
+      midHeight = (lgHghtMinusK - smHghtPlusK) / 2 + smHghtPlusK;
+      midSinOutput = midHeight - (1 - midHeight);
+      
+      
+      lgHeight = lgSlope + (1 - lgSlope) / 2;
+      lgHghtMinusK = lgHeight - K * smSinOutput / 2;
+      
+      smHeight = smSlope + (1 - smSlope) / 2;
+      smHghtPlusK = smHeight + K * lgSinOutput / 2;
+      
+      midHeight = (lgHghtMinusK - smHghtPlusK) / 2 + smHghtPlusK;
+      midSlope = midHeight - (1 - midHeight);
+      
+      midAngle = (lgAngle - smAngle) / 2 + smAngle;
+      
+      if (inputAngle >= midAngle)
+      {
+         smAngle = midAngle;
+         smSinOutput = midSinOutput;
+         smSlope = midSlope;
+      }
+      else
+      {
+         lgAngle = midAngle;
+         lgSinOutput = midSinOutput;
+         lgSlope = midSlope;
+      }
+   }
+   
+   if (lessThanZero)
+   sinOutput.value = Math.round(-midSinOutput * 10000) / 10000;
+   else
+   sinOutput.value = Math.round(midSinOutput * 10000) / 10000;
+}
+</script>
+
+<center>
+<input type="button" value="Compute" onclick="main();">
+</center>
+-Calculate Sine-
+<hr>
+Input:
+<br>
+<input id="sinInput" type="text" size="20" value="">
+<br>
+<br>
+Output:
+<br>
+<input id="sinOutput" type="text" size="20" value="">
+<hr>
+
+<span><span class="S1">&lt;html&gt;</span><br>
+<span class="S1">&lt;head&gt;</span><br>
+<span class="S1">&lt;title&gt;</span><span class="S0">Sine</span><span class="S1">&lt;/title&gt;</span><br>
+<span class="S1">&lt;/head&gt;</span><br>
+<span class="S1">&lt;body</span><span class="S8"> </span><span class="S3">bgcolor</span><span class="S8">=</span><span class="S6">"#FFFFFF"</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;SCRIPT</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"text/javascript"</span><span class="S1">&gt;</span><br>
+<span class="S43">// written by: Crailin Mogged //</span><br>
+<span class="S43">// This program shows the operations that make up the sine function.</span><br>
+<span class="S47">function</span><span class="S41"> </span><span class="S46">main</span><span class="S50">()</span><br>
+<span class="S50">{</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">parseFloat</span><span class="S50">(</span><span class="S46">sinInput.value</span><span class="S50">);</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">lgSinOutput</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">,</span><span class="S41"> </span><span class="S46">smSinOutput</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">,</span><span class="S41"> </span><span class="S46">midSinOutput</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">lgSlope</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">,</span><span class="S41"> </span><span class="S46">smSlope</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">,</span><span class="S41"> </span><span class="S46">midSlope</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">lgAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">90</span><span class="S50">,</span><span class="S41"> </span><span class="S46">smAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">,</span><span class="S41"> </span><span class="S46">midAngle</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">A</span><span class="S50">,</span><span class="S46">B</span><span class="S50">,</span><span class="S46">C</span><span class="S50">,</span><span class="S46">D</span><span class="S50">,</span><span class="S46">E</span><span class="S50">,</span><span class="S46">F</span><span class="S50">,</span><span class="S46">G</span><span class="S50">,</span><span class="S46">H</span><span class="S50">,</span><span class="S46">I</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">J</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">,</span><span class="S41"> </span><span class="S46">K</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">lgHeight</span><span class="S50">,</span><span class="S41"> </span><span class="S46">midHeight</span><span class="S50">,</span><span class="S41"> </span><span class="S46">smHeight</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">lgHghtMinusK</span><span class="S50">,</span><span class="S41"> </span><span class="S46">smHghtPlusK</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">i</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">lessThanZero</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">if</span><span class="S41"> </span><span class="S50">(</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">%</span><span class="S41"> </span><span class="S45">360</span><span class="S41"> </span><span class="S50">&gt;</span><span class="S41"> </span><span class="S45">180</span><span class="S50">)</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S46">lessThanZero</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">if</span><span class="S41"> </span><span class="S50">((</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">%</span><span class="S41"> </span><span class="S45">360</span><span class="S41"> </span><span class="S50">&gt;</span><span class="S41"> </span><span class="S50">-</span><span class="S45">180</span><span class="S50">)</span><span class="S41"> </span><span class="S50">&amp;&amp;</span><span class="S41"> </span><span class="S50">(</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">%</span><span class="S41"> </span><span class="S45">360</span><span class="S41"> </span><span class="S50">&lt;</span><span class="S41"> </span><span class="S45">0</span><span class="S50">))</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S46">lessThanZero</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">if</span><span class="S41"> </span><span class="S50">(</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">&lt;</span><span class="S41"> </span><span class="S45">0</span><span class="S50">)</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">-</span><span class="S46">inputAngle</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">%</span><span class="S41"> </span><span class="S45">180</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">if</span><span class="S41"> </span><span class="S50">(</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">&gt;</span><span class="S41"> </span><span class="S45">90</span><span class="S50">)</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">90</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S50">(</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S45">90</span><span class="S50">);</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">for</span><span class="S41"> </span><span class="S50">(</span><span class="S46">i</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><span class="S41"> </span><span class="S46">i</span><span class="S41"> </span><span class="S50">&lt;</span><span class="S41"> </span><span class="S45">16</span><span class="S50">;</span><span class="S41"> </span><span class="S46">i</span><span class="S50">++)</span><span class="S41"> </span><span class="S43">// The number of loops is equal to 16</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S50">{</span><span class="S41"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S43">// The more loops, the more accurate</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S43">// This is the formula found in <a href="./Deriving Pi.html">"./Deriving Pi.html"</a></span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">A</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">J</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">B</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">Math.sqrt</span><span class="S50">(</span><span class="S46">A</span><span class="S50">);</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">C</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">B</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">D</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S46">K</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">K</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">C</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">D</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">E</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">K</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">F</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">E</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">G</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">F</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">K</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">H</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">G</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">F</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">I</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">H</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">J</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">I</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">lgHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">lgSinOutput</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S50">(</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">lgSinOutput</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">lgHghtMinusK</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">lgHeight</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">K</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">lgSlope</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">smHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">smSinOutput</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S50">(</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">smSinOutput</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">smHghtPlusK</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">smHeight</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">K</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">smSlope</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">midHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">(</span><span class="S46">lgHghtMinusK</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">smHghtPlusK</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">smHghtPlusK</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">midSinOutput</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midHeight</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S50">(</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">midHeight</span><span class="S50">);</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">lgHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">lgSlope</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S50">(</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">lgSlope</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">lgHghtMinusK</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">lgHeight</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">K</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">smSinOutput</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">smHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">smSlope</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S50">(</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">smSlope</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">smHghtPlusK</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">smHeight</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">K</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">lgSinOutput</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">midHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">(</span><span class="S46">lgHghtMinusK</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">smHghtPlusK</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">smHghtPlusK</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">midSlope</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midHeight</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S50">(</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">midHeight</span><span class="S50">);</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">midAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">(</span><span class="S46">lgAngle</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">smAngle</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">smAngle</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S47">if</span><span class="S41"> </span><span class="S50">(</span><span class="S46">inputAngle</span><span class="S41"> </span><span class="S50">&gt;=</span><span class="S41"> </span><span class="S46">midAngle</span><span class="S50">)</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">smAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midAngle</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">smSinOutput</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midSinOutput</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">smSlope</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midSlope</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S50">}</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S47">else</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">lgAngle</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midAngle</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">lgSinOutput</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midSinOutput</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">lgSlope</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">midSlope</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S50">}</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S50">}</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">if</span><span class="S41"> </span><span class="S50">(</span><span class="S46">lessThanZero</span><span class="S50">)</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">sinOutput.value</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">Math.round</span><span class="S50">(-</span><span class="S46">midSinOutput</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">10000</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">10000</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">else</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">sinOutput.value</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">Math.round</span><span class="S50">(</span><span class="S46">midSinOutput</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">10000</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">10000</span><span class="S50">;</span><br>
+<span class="S50">}</span><br>
+<span class="S1">&lt;/SCRIPT&gt;</span><br>
+<br>
+<span class="S1">&lt;H4&gt;</span><br>
+<span class="S1">&lt;CENTER&gt;</span><br>
+<span class="S1">&lt;INPUT</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"button"</span><span class="S8"> </span><span class="S3">value</span><span class="S8">=</span><span class="S6">"Compute"</span><span class="S8"> </span><span class="S3">onClick</span><span class="S8">=</span><span class="S6">"main();"</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;/CENTER&gt;</span><br>
+<span class="S0">-Calculate Sine-</span><br>
+<span class="S1">&lt;HR&gt;</span><br>
+<span class="S0">Input:</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S1">&lt;INPUT</span><span class="S8"> </span><span class="S3">id</span><span class="S8">=</span><span class="S6">"sinInput"</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"text"</span><span class="S8"> </span><span class="S3">size</span><span class="S8">=</span><span class="S6">"20"</span><span class="S8"> </span><span class="S3">value</span><span class="S8">=</span><span class="S6">""</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S0">Output:</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S1">&lt;INPUT</span><span class="S8"> </span><span class="S3">id</span><span class="S8">=</span><span class="S6">"sinOutput"</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"text"</span><span class="S8"> </span><span class="S3">size</span><span class="S8">=</span><span class="S6">"20"</span><span class="S8"> </span><span class="S3">value</span><span class="S8">=</span><span class="S6">""</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;HR&gt;</span><br>
+<span class="S1">&lt;/body&gt;</span><br>
+<span class="S1">&lt;/html&gt;</span><br>
+<span class="S0"></span></span>
+
+</body></html>

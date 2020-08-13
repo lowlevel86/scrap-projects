@@ -1,0 +1,161 @@
+
+<!-- saved from url=(0026)http://cchm86.com/sqrt.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Square Root</title>
+<style type="text/css">
+.S0 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #FFFFFF;
+	font-size: 13pt;
+}
+.S1 {
+	color: #000080;
+	background: #FFFFFF;
+}
+.S3 {
+	color: #008080;
+	background: #FFFFFF;
+}
+.S6 {
+	color: #7F007F;
+	background: #FFFFFF;
+}
+.S8 {
+	color: #800080;
+	background: #FFFFFF;
+}
+span {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #FFFFFF;
+	font-size: 12pt;
+}
+.S40 {
+	color: #7F7F00;
+	background: #FFFFFF;
+}
+.S41 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	font-size: 12pt;
+}
+.S45 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #007F7F;
+	background: #F0F0FF;
+	font-size: 12pt;
+}
+.S46 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	font-size: 12pt;
+}
+.S47 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #00007F;
+	background: #F0F0FF;
+	font-size: 12pt;
+}
+.S50 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	font-size: 12pt;
+}
+</style>
+</head>
+<body bgcolor="#FFFFFF">
+<a href="http://cchm86.com/">Home</a>
+<script type="text/javascript">
+function main()
+{
+	var a = parseFloat(x.value);
+   var b = a * 1000000000000000000;
+   var c = 1;
+   var d = 0;
+   var e = 0;
+
+   while (d < b)
+   {
+      while (d < b)
+      {
+         d = (e+c) * (e+c);
+         c = c * 2;
+      }
+      e = c / 4 + e;
+      d = e * e;
+      c = 1;
+   }
+
+	y.value = e / 1000000000;
+}
+</script>
+
+<h2>
+<center>
+<input type="button" value="Compute" onclick="main();">
+</center>
+-Calculate Square Root-
+<hr>
+Input:
+<br>
+<input id="x" type="text" size="20" value="45">
+<br>
+<br>
+Output:
+<br>
+<input id="y" type="text" size="20" value="">
+<hr>
+
+
+<span><span class="S1">&lt;HTML&gt;</span><br>
+<span class="S1">&lt;SCRIPT&gt;</span><br>
+<span class="S47">function</span><span class="S41"> </span><span class="S46">main</span><span class="S50">()</span><br>
+<span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">a</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">parseFloat</span><span class="S50">(</span><span class="S46">x.value</span><span class="S50">);</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">b</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">a</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">1000000000000000000</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">c</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">d</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">e</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><br>
+<br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S47">while</span><span class="S41"> </span><span class="S50">(</span><span class="S46">d</span><span class="S41"> </span><span class="S50">&lt;</span><span class="S41"> </span><span class="S46">b</span><span class="S50">)</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S47">while</span><span class="S41"> </span><span class="S50">(</span><span class="S46">d</span><span class="S41"> </span><span class="S50">&lt;</span><span class="S41"> </span><span class="S46">b</span><span class="S50">)</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">d</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">(</span><span class="S46">e</span><span class="S50">+</span><span class="S46">c</span><span class="S50">)</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S50">(</span><span class="S46">e</span><span class="S50">+</span><span class="S46">c</span><span class="S50">);</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">c</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">c</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S50">}</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">e</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">c</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">4</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">e</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">d</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">e</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">e</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S46">c</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S50">}</span><br>
+<br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">y.value</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">e</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">1000000000</span><span class="S50">;</span><br>
+<span class="S50">}</span><br>
+<span class="S1">&lt;/SCRIPT&gt;</span><br>
+<span class="S1">&lt;BODY&gt;</span><br>
+<span class="S1">&lt;H2&gt;</span><br>
+<span class="S1">&lt;CENTER&gt;</span><br>
+<span class="S1">&lt;INPUT</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"button"</span><span class="S8"> </span><span class="S3">value</span><span class="S8">=</span><span class="S6">"Compute"</span><span class="S8"> </span><span class="S3">onClick</span><span class="S8">=</span><span class="S6">"main();"</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;/CENTER&gt;</span><br>
+<span class="S0">-Calculate Square Root-</span><br>
+<span class="S1">&lt;HR&gt;</span><br>
+<span class="S0">Input:</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S1">&lt;INPUT</span><span class="S8"> </span><span class="S3">id</span><span class="S8">=</span><span class="S6">"x"</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"text"</span><span class="S8"> </span><span class="S3">size</span><span class="S8">=</span><span class="S6">"20"</span><span class="S8"> </span><span class="S3">value</span><span class="S8">=</span><span class="S6">"45"</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S0">Output:</span><br>
+<span class="S1">&lt;BR&gt;</span><br>
+<span class="S1">&lt;INPUT</span><span class="S8"> </span><span class="S3">id</span><span class="S8">=</span><span class="S6">"y"</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"text"</span><span class="S8"> </span><span class="S3">size</span><span class="S8">=</span><span class="S6">"20"</span><span class="S8"> </span><span class="S3">value</span><span class="S8">=</span><span class="S6">""</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;/BODY&gt;</span><br>
+<span class="S1">&lt;/HTML&gt;</span><br>
+<span class="S0"></span></span>
+
+</h2></body></html>

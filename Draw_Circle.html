@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0033)http://cchm86.com/drawCircle.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Draw Circle</title>
+<meta name="Generator" content="SciTE - www.Scintilla.org">
+<style type="text/css">
+.S0 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	font-size: 13pt;
+}
+.S1 {
+	color: #000080;
+}
+.S3 {
+	color: #008080;
+}
+.S6 {
+	color: #7F007F;
+}
+.S8 {
+	color: #800080;
+}
+span {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	font-size: 12pt;
+}
+.S40 {
+	color: #7F7F00;
+}
+.S41 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S43 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #007F00;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S45 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #007F7F;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S46 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S47 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #00007F;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S49 {
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #7F007F;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+.S50 {
+	font-weight: bold;
+	font-family: '!Bitstream Vera Sans Mono';
+	color: #000000;
+	background: #F0F0FF;
+	text-decoration: inherit;
+	font-size: 12pt;
+}
+</style>
+</head>
+<body bgcolor="#FFFFFF" onload="CreateCircleCurve()">
+<a href="http://cchm86.com/">Home</a>
+<hr>
+
+<script type="text/javascript">
+// written by: Crailin Mogged //
+// Copy and save as circle.html
+// This program draws a circle without using sine or cosine.
+document.write('<div  id="backPage"> </div>'); 
+var Ypos = new Array();
+var expPatt = new Array();
+var sides = 128;
+var expPattLayer = 1;
+var cnt;
+var X = 1;
+var Y = 1;
+var tYHeight;
+var bYHeight;
+var bPatt;
+var tPatt;
+
+function CreateCircleCurve()
+{
+   expPattLayer = 1;
+   X = 1;
+   Y = 1;
+   Ypos[0] = 1;
+   Ypos[sides] = 0;
+   while (expPattLayer != sides)
+   {
+      DoubleSquares();
+      MakeExpPatt();
+      GetYPositions();
+   }
+   MirrorCurve();
+   
+   var xdiam = 110;
+   var ydiam = 110;
+   var xAxis;
+   var yAxis;
+   
+   for (var i=0; i < sides/2; i++)
+   {
+      xAxis = 340+Ypos[(i+0)*16%(sides*4)]*xdiam;
+      yAxis = 120+Ypos[(sides+i*16)%(sides*4)]*ydiam;
+      document.getElementById('backPage').innerHTML = document.getElementById('backPage').innerHTML+'<div id="dot'+[i]+'" style="LEFT:'+xAxis+'px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:'+yAxis+'px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div>';
+   }
+}
+
+function DoubleSquares()
+{
+   // This is the formula found in "./Deriving Pi.html"
+   Y = (Math.sqrt(X * 2) - 1)  *  (1 / Y);
+   X = 1 - ((1 - Y) / 2 + Y) * ((1 - Y) / 2) * 2;
+}
+
+
+// [8*9*10*11*12*13*14*15]
+// [*4***5***6***7*]
+// [***2*******3***]
+//
+// [4*5*6*7]
+// [*2***3*]
+
+function MakeExpPatt()
+{
+   cnt = 0;
+   expPatt[cnt+expPattLayer] = sides / (expPattLayer + expPattLayer);
+   while(expPatt[cnt+expPattLayer] + sides / expPattLayer < sides)
+   {
+      cnt++;
+      expPatt[cnt+expPattLayer] = expPatt[cnt+expPattLayer-1] + sides / expPattLayer;
+   }
+   expPattLayer = expPattLayer * 2;
+}
+
+function GetYPositions()
+{
+   cnt = 0;
+   while (cnt != expPattLayer)
+   {
+      cnt++;
+      bPatt = cnt * (sides / (expPattLayer / 2));
+      tPatt = (cnt - 1) * (sides / (expPattLayer / 2));
+      tYHeight = Ypos[tPatt] - Ypos[sides - tPatt] * Y;
+      bYHeight = Ypos[bPatt] + Ypos[sides - bPatt] * Y;
+      Ypos[expPatt[cnt-1+expPattLayer / 2]] = (tYHeight - bYHeight) / 2 + bYHeight;
+   }
+}
+function MirrorCurve()
+{
+   cnt = 0;
+   while (cnt != sides)
+   {
+      cnt++;
+      Ypos[sides+cnt] = -Ypos[sides - cnt];
+      Ypos[sides * 2 + cnt] = -Ypos[cnt];
+      Ypos[sides * 3 + cnt] = Ypos[sides - cnt];
+   }
+}
+</script><div id="backPage"> <div id="dot0" style="LEFT:450px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:120px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot1" style="LEFT:447.88638084435536px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:98.5400645782259px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot2" style="LEFT:441.62674857624154px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:77.90482243984012px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot3" style="LEFT:431.46165735328px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:58.88727436784375px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot4" style="LEFT:417.78174593052023px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:42.21825406947977px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot5" style="LEFT:401.11272563215624px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:28.53834264672001px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot6" style="LEFT:382.09517756015987px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:18.37325142375846px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot7" style="LEFT:361.4599354217741px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:12.113619155644656px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot8" style="LEFT:340px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:10px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot9" style="LEFT:318.5400645782259px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:12.113619155644656px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot10" style="LEFT:297.90482243984013px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:18.37325142375846px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot11" style="LEFT:278.88727436784376px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:28.53834264672001px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot12" style="LEFT:262.21825406947977px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:42.21825406947977px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot13" style="LEFT:248.53834264672003px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:58.88727436784375px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot14" style="LEFT:238.37325142375846px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:77.90482243984012px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot15" style="LEFT:232.11361915564464px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:98.5400645782259px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot16" style="LEFT:230px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:120px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot17" style="LEFT:232.11361915564464px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:141.4599354217741px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot18" style="LEFT:238.37325142375846px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:162.09517756015987px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot19" style="LEFT:248.53834264672003px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:181.11272563215624px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot20" style="LEFT:262.21825406947977px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:197.78174593052023px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot21" style="LEFT:278.88727436784376px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:211.46165735327997px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot22" style="LEFT:297.90482243984013px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:221.62674857624154px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot23" style="LEFT:318.5400645782259px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:227.88638084435536px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot24" style="LEFT:340px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:230px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot25" style="LEFT:361.4599354217741px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:227.88638084435536px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot26" style="LEFT:382.09517756015987px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:221.62674857624154px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot27" style="LEFT:401.11272563215624px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:211.46165735327997px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot28" style="LEFT:417.78174593052023px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:197.78174593052023px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot29" style="LEFT:431.46165735328px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:181.11272563215624px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot30" style="LEFT:441.62674857624154px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:162.09517756015987px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot31" style="LEFT:447.88638084435536px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:141.4599354217741px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot32" style="LEFT:450px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:120px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot33" style="LEFT:447.88638084435536px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:98.5400645782259px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot34" style="LEFT:441.62674857624154px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:77.90482243984012px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot35" style="LEFT:431.46165735328px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:58.88727436784375px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot36" style="LEFT:417.78174593052023px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:42.21825406947977px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot37" style="LEFT:401.11272563215624px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:28.53834264672001px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot38" style="LEFT:382.09517756015987px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:18.37325142375846px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot39" style="LEFT:361.4599354217741px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:12.113619155644656px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot40" style="LEFT:340px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:10px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot41" style="LEFT:318.5400645782259px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:12.113619155644656px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot42" style="LEFT:297.90482243984013px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:18.37325142375846px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot43" style="LEFT:278.88727436784376px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:28.53834264672001px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot44" style="LEFT:262.21825406947977px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:42.21825406947977px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot45" style="LEFT:248.53834264672003px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:58.88727436784375px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot46" style="LEFT:238.37325142375846px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:77.90482243984012px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot47" style="LEFT:232.11361915564464px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:98.5400645782259px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot48" style="LEFT:230px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:120px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot49" style="LEFT:232.11361915564464px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:141.4599354217741px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot50" style="LEFT:238.37325142375846px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:162.09517756015987px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot51" style="LEFT:248.53834264672003px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:181.11272563215624px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot52" style="LEFT:262.21825406947977px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:197.78174593052023px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot53" style="LEFT:278.88727436784376px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:211.46165735327997px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot54" style="LEFT:297.90482243984013px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:221.62674857624154px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot55" style="LEFT:318.5400645782259px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:227.88638084435536px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot56" style="LEFT:340px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:230px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot57" style="LEFT:361.4599354217741px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:227.88638084435536px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot58" style="LEFT:382.09517756015987px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:221.62674857624154px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot59" style="LEFT:401.11272563215624px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:211.46165735327997px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot60" style="LEFT:417.78174593052023px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:197.78174593052023px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot61" style="LEFT:431.46165735328px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:181.11272563215624px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot62" style="LEFT:441.62674857624154px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:162.09517756015987px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div><div id="dot63" style="LEFT:447.88638084435536px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:141.4599354217741px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"> </div></div>
+
+<span><span class="S1">&lt;HTML&gt;</span><br>
+<span class="S1">&lt;HEAD&gt;</span><br>
+<span class="S1">&lt;/HEAD&gt;</span><br>
+<span class="S1">&lt;BODY</span><span class="S8"> </span><span class="S3">onLoad</span><span class="S8">=</span><span class="S6">"CreateCircleCurve()"</span><span class="S1">&gt;</span><br>
+<span class="S1">&lt;SCRIPT</span><span class="S8"> </span><span class="S3">type</span><span class="S8">=</span><span class="S6">"text/javascript"</span><span class="S1">&gt;</span><br>
+<span class="S43">// written by: Crailin Mogged //</span><br>
+<span class="S43">// Copy and save as circle.html</span><br>
+<span class="S43">// This program draws a circle without using sine or cosine.</span><br>
+<span class="S46">document.write</span><span class="S50">(</span><span class="S49">'&lt;div &nbsp;id="backPage"&gt; &lt;/div&gt;'</span><span class="S50">);</span><span class="S41">&nbsp; </span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">Ypos</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S47">new</span><span class="S41"> </span><span class="S46">Array</span><span class="S50">();</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">expPatt</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S47">new</span><span class="S41"> </span><span class="S46">Array</span><span class="S50">();</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">sides</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">128</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">cnt</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">X</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">Y</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">tYHeight</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">bYHeight</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">bPatt</span><span class="S50">;</span><br>
+<span class="S47">var</span><span class="S41"> </span><span class="S46">tPatt</span><span class="S50">;</span><br>
+<br>
+<span class="S47">function</span><span class="S41"> </span><span class="S46">CreateCircleCurve</span><span class="S50">()</span><br>
+<span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">X</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">Y</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S45">0</span><span class="S50">]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S50">]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">while</span><span class="S41"> </span><span class="S50">(</span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">!=</span><span class="S41"> </span><span class="S46">sides</span><span class="S50">)</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">DoubleSquares</span><span class="S50">();</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">MakeExpPatt</span><span class="S50">();</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">GetYPositions</span><span class="S50">();</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">}</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">MirrorCurve</span><span class="S50">();</span><br>
+<span class="S41">&nbsp; &nbsp;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">xdiam</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">110</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">ydiam</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">110</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">xAxis</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">var</span><span class="S41"> </span><span class="S46">yAxis</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">for</span><span class="S41"> </span><span class="S50">(</span><span class="S47">var</span><span class="S41"> </span><span class="S46">i</span><span class="S50">=</span><span class="S45">0</span><span class="S50">;</span><span class="S41"> </span><span class="S46">i</span><span class="S41"> </span><span class="S50">&lt;</span><span class="S41"> </span><span class="S46">sides</span><span class="S50">/</span><span class="S45">2</span><span class="S50">;</span><span class="S41"> </span><span class="S46">i</span><span class="S50">++)</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">xAxis</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">340</span><span class="S50">+</span><span class="S46">Ypos</span><span class="S50">[(</span><span class="S46">i</span><span class="S50">+</span><span class="S45">0</span><span class="S50">)*</span><span class="S45">16</span><span class="S50">%(</span><span class="S46">sides</span><span class="S50">*</span><span class="S45">4</span><span class="S50">)]*</span><span class="S46">xdiam</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">yAxis</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">120</span><span class="S50">+</span><span class="S46">Ypos</span><span class="S50">[(</span><span class="S46">sides</span><span class="S50">+</span><span class="S46">i</span><span class="S50">*</span><span class="S45">16</span><span class="S50">)%(</span><span class="S46">sides</span><span class="S50">*</span><span class="S45">4</span><span class="S50">)]*</span><span class="S46">ydiam</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">document.getElementById</span><span class="S50">(</span><span class="S49">'backPage'</span><span class="S50">).</span><span class="S46">innerHTML</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">document.getElementById</span><span class="S50">(</span><span class="S49">'backPage'</span><span class="S50">).</span><span class="S46">innerHTML</span><span class="S50">+</span><span class="S49">'&lt;div id="dot'</span><span class="S50">+[</span><span class="S46">i</span><span class="S50">]+</span><span class="S49">'" style="LEFT:'</span><span class="S50">+</span><span class="S46">xAxis</span><span class="S50">+</span><span class="S49">'px; WIDTH:3px; CLIP: rect(0px 3px 3px 0px); POSITION: absolute; TOP:'</span><span class="S50">+</span><span class="S46">yAxis</span><span class="S50">+</span><span class="S49">'px; HEIGHT: 10px; BACKGROUND-COLOR: #000000"&gt; &lt;/div&gt;'</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">}</span><br>
+<span class="S50">}</span><br>
+<br>
+<span class="S47">function</span><span class="S41"> </span><span class="S46">DoubleSquares</span><span class="S50">()</span><br>
+<span class="S50">{</span><br>
+<span class="S41">&nbsp;&nbsp;&nbsp;</span><span class="S43">// This is the formula found in <a href="./Deriving Pi.html">"./Deriving Pi.html"</a></span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">Y</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">(</span><span class="S46">Math.sqrt</span><span class="S50">(</span><span class="S46">X</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">2</span><span class="S50">)</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S45">1</span><span class="S50">)</span><span class="S41"> &nbsp;</span><span class="S50">*</span><span class="S41"> &nbsp;</span><span class="S50">(</span><span class="S45">1</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S46">Y</span><span class="S50">);</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">X</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S50">((</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">Y</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">Y</span><span class="S50">)</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S50">((</span><span class="S45">1</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">Y</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">)</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S50">}</span><br>
+<br>
+<br>
+<span class="S43">// [8*9*10*11*12*13*14*15]</span><br>
+<span class="S43">// [*4***5***6***7*]</span><br>
+<span class="S43">// [***2*******3***]</span><br>
+<span class="S43">//</span><br>
+<span class="S43">// [4*5*6*7]</span><br>
+<span class="S43">// [*2***3*]</span><br>
+<br>
+<span class="S47">function</span><span class="S41"> </span><span class="S46">MakeExpPatt</span><span class="S50">()</span><br>
+<span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">cnt</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">expPatt</span><span class="S50">[</span><span class="S46">cnt</span><span class="S50">+</span><span class="S46">expPattLayer</span><span class="S50">]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">sides</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S50">(</span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">expPattLayer</span><span class="S50">);</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">while</span><span class="S50">(</span><span class="S46">expPatt</span><span class="S50">[</span><span class="S46">cnt</span><span class="S50">+</span><span class="S46">expPattLayer</span><span class="S50">]</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">sides</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">&lt;</span><span class="S41"> </span><span class="S46">sides</span><span class="S50">)</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">cnt</span><span class="S50">++;</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">expPatt</span><span class="S50">[</span><span class="S46">cnt</span><span class="S50">+</span><span class="S46">expPattLayer</span><span class="S50">]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">expPatt</span><span class="S50">[</span><span class="S46">cnt</span><span class="S50">+</span><span class="S46">expPattLayer</span><span class="S50">-</span><span class="S45">1</span><span class="S50">]</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">sides</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S46">expPattLayer</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">}</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">2</span><span class="S50">;</span><br>
+<span class="S50">}</span><br>
+<br>
+<span class="S47">function</span><span class="S41"> </span><span class="S46">GetYPositions</span><span class="S50">()</span><br>
+<span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">cnt</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">while</span><span class="S41"> </span><span class="S50">(</span><span class="S46">cnt</span><span class="S41"> </span><span class="S50">!=</span><span class="S41"> </span><span class="S46">expPattLayer</span><span class="S50">)</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">cnt</span><span class="S50">++;</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">bPatt</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">cnt</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S50">(</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S50">(</span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">));</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">tPatt</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">(</span><span class="S46">cnt</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S45">1</span><span class="S50">)</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S50">(</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S50">(</span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">));</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">tYHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">tPatt</span><span class="S50">]</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">tPatt</span><span class="S50">]</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">Y</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">bYHeight</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">bPatt</span><span class="S50">]</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">bPatt</span><span class="S50">]</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S46">Y</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">expPatt</span><span class="S50">[</span><span class="S46">cnt</span><span class="S50">-</span><span class="S45">1</span><span class="S50">+</span><span class="S46">expPattLayer</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S50">]]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">(</span><span class="S46">tYHeight</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">bYHeight</span><span class="S50">)</span><span class="S41"> </span><span class="S50">/</span><span class="S41"> </span><span class="S45">2</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">bYHeight</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">}</span><br>
+<span class="S50">}</span><br>
+<span class="S47">function</span><span class="S41"> </span><span class="S46">MirrorCurve</span><span class="S50">()</span><br>
+<span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S46">cnt</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S45">0</span><span class="S50">;</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S47">while</span><span class="S41"> </span><span class="S50">(</span><span class="S46">cnt</span><span class="S41"> </span><span class="S50">!=</span><span class="S41"> </span><span class="S46">sides</span><span class="S50">)</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">{</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">cnt</span><span class="S50">++;</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S50">+</span><span class="S46">cnt</span><span class="S50">]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">-</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">cnt</span><span class="S50">];</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">2</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">cnt</span><span class="S50">]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S50">-</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">cnt</span><span class="S50">];</span><br>
+<span class="S41">&nbsp; &nbsp;&nbsp; &nbsp;</span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">*</span><span class="S41"> </span><span class="S45">3</span><span class="S41"> </span><span class="S50">+</span><span class="S41"> </span><span class="S46">cnt</span><span class="S50">]</span><span class="S41"> </span><span class="S50">=</span><span class="S41"> </span><span class="S46">Ypos</span><span class="S50">[</span><span class="S46">sides</span><span class="S41"> </span><span class="S50">-</span><span class="S41"> </span><span class="S46">cnt</span><span class="S50">];</span><br>
+<span class="S41">&nbsp; &nbsp;</span><span class="S50">}</span><br>
+<span class="S50">}</span><br>
+<span class="S1">&lt;/SCRIPT&gt;</span><br>
+<span class="S1">&lt;/BODY&gt;</span><br>
+<span class="S1">&lt;/HTML&gt;</span><br>
+<span class="S0"></span></span>
+
+</body></html>
