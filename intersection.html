@@ -1,0 +1,179 @@
+<html>
+<head><title>Calculate Intersection</title>
+</head>
+<body>
+<center>
+<div id="win" style="height:95%;width:95%;border:1px solid #ccc;">
+<canvas id="myCanvas" onmousemove="trackMouse(event)" onmousedown="dragEndBox()" onmouseup="stopDrag()">Your browser does not support the HTML5 canvas tag.</canvas>
+</div>
+</center>
+<script>
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+c.width = document.getElementById('win').clientWidth;
+c.height = document.getElementById('win').clientHeight;
+
+var line1_xA = 10.0;
+var line1_yA = 10.0;
+var line1_xB = c.width/2.0;
+var line1_yB = c.height/2.0;
+var line2_xA = 10.0;
+var line2_yA = c.height/2.0;
+var line2_xB = c.width/2.0;
+var line2_yB = 10.0;
+var xIntercept;
+var yIntercept;
+var xPointer = 0, yPointer = 0;
+var endBox = 0;
+
+function calcIntersection(l1_xA, l1_yA, l1_xB, l1_yB,
+                          l2_xA, l2_yA, l2_xB, l2_yB)
+{
+    var m1, m2, b2_x, b1, b2, lSide, rSide, x;
+    
+    
+    // error handling
+    if ((l1_xA == l1_xB) && (l1_yA == l1_yB))
+    {
+        console.log("not a line");
+        return;
+    }
+    if ((l2_xA == l2_xB) && (l2_yA == l2_yB))
+    {
+        console.log("not a line");
+        return;
+    }
+    if (l1_xA == l1_xB)
+    {
+        if (l2_xA == l2_xB)
+        {
+            console.log("same slope");
+            return;
+        }
+        
+        xIntercept = l1_xA;
+        yIntercept = l2_yA - (l2_xA - xIntercept) / (l2_xA - l2_xB) * (l2_yA - l2_yB);
+        return;
+    }
+    if (l2_xA == l2_xB)
+    {
+        if (l1_xA == l1_xB)
+        {
+            console.log("same slope");
+            return;
+        }
+        
+        xIntercept = l2_xA;
+        yIntercept = l1_yA - (l1_xA - xIntercept) / (l1_xA - l1_xB) * (l1_yA - l1_yB);
+        return;
+    }
+    
+    // y = x*m + b
+    m1 = (l1_yB - l1_yA) / (l1_xB - l1_xA); // find slopes
+    m2 = (l2_yB - l2_yA) / (l2_xB - l2_xA);
+    
+    if (m1 == m2)
+    {
+        console.log("same slope");
+        return;
+    }
+
+    b2_x = l2_xA; // start both lines with the same offset
+    b1 = l1_yA - (l1_xA - b2_x) / (l1_xA - l1_xB) * (l1_yA - l1_yB);
+    b2 = l2_yA;
+
+    lSide = m1 - m2;
+    rSide = b2 - b1;
+
+    x = rSide / lSide;
+    xIntercept = x + b2_x;
+    yIntercept = x*m1 + b1; // x*m2 + b2;
+}
+
+function drawScreen()
+{
+    calcIntersection(line1_xA, line1_yA, line1_xB, line1_yB,
+                     line2_xA, line2_yA, line2_xB, line2_yB);
+    
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    ctx.strokeStyle = "#007700";
+    ctx.beginPath();
+    ctx.moveTo(line1_xA, line1_yA);
+    ctx.lineTo(line1_xB, line1_yB);
+    ctx.stroke();
+    ctx.strokeRect(line1_xA-5, line1_yA-5, 10, 10);
+    ctx.strokeRect(line1_xB-5, line1_yB-5, 10, 10);
+
+    ctx.strokeStyle = "#770000";
+    ctx.beginPath();
+    ctx.moveTo(line2_xA, line2_yA);
+    ctx.lineTo(line2_xB, line2_yB);
+    ctx.stroke();
+    ctx.strokeRect(line2_xA-5, line2_yA-5, 10, 10);
+    ctx.strokeRect(line2_xB-5, line2_yB-5, 10, 10);
+
+    ctx.strokeStyle = "#000077";
+    ctx.strokeRect(xIntercept-1.5, yIntercept-1.5, 3, 3);
+
+    ctx.font = "20px Verdana";
+    ctx.fillText("Intersection Point: "+xIntercept.toFixed(3)+", "+yIntercept.toFixed(3), 10, 25);
+    ctx.fillText("Mouse Location: "+xPointer+", "+yPointer, 10, c.height-10);
+}
+
+function trackMouse(event)
+{
+    var rect = c.getBoundingClientRect();
+    var x = (event.clientX - rect.left) / (rect.right - rect.left) * c.width;
+    var y = (event.clientY - rect.top) / (rect.bottom - rect.top) * c.height;
+    xPointer = Math.round(x);
+    yPointer = Math.round(y);
+
+    if (endBox == 1)
+    {
+        line1_xA = xPointer;
+        line1_yA = yPointer;
+    }
+    else if (endBox == 2)
+    {
+        line1_xB = xPointer;
+        line1_yB = yPointer;
+    }
+    else if (endBox == 3)
+    {
+        line2_xA = xPointer;
+        line2_yA = yPointer;
+    }
+    else if (endBox == 4)
+    {
+        line2_xB = xPointer;
+        line2_yB = yPointer;
+    }
+
+    drawScreen();
+}
+
+function dragEndBox()
+{
+    if ((xPointer >= line1_xA - 8) && (xPointer < line1_xA + 8) && (yPointer >= line1_yA - 8) && (yPointer < line1_yA + 8))
+    endBox = 1;
+    else if ((xPointer >= line1_xB - 8) && (xPointer < line1_xB + 8) && (yPointer >= line1_yB - 8) && (yPointer < line1_yB + 8))
+    endBox = 2;
+    else if ((xPointer >= line2_xA - 8) && (xPointer < line2_xA + 8) && (yPointer >= line2_yA - 8) && (yPointer < line2_yA + 8))
+    endBox = 3;
+    else if ((xPointer >= line2_xB - 8) && (xPointer < line2_xB + 8) && (yPointer >= line2_yB - 8) && (yPointer < line2_yB + 8))
+    endBox = 4;
+}
+
+function stopDrag()
+{
+    endBox = 0;
+}
+
+drawScreen();
+
+</script>
+</body>
+</html>
+
