@@ -10,13 +10,11 @@ Tooltip: 'Execute any python script with a click of a button.'
 __bpydoc__ = """\
 Execute any python script with a click of a button.
 
-1. Go to "User Preference".
+1. Create a folder called "quickPy" next to your *.blend file.
 
-2. Click on "File Paths".
+2. Add blender python scripts to the "quickPy" folder.
 
-3. Edit "Python Scripts" to the path this script is in along with others.
-
-4. Run this script found in "Misc".
+3. Run this script found in "Misc".
 """
 
 from Blender import *
@@ -67,19 +65,27 @@ def gui():
 scene = Scene.GetCurrent()
 
 # Get the scripts filepath
-#file_path = Get('filename')
-#directory = os.path.dirname(file_path)
-#py_path = os.path.join(directory, 'quickPy')
-py_path = bpy.config.userScriptsDir
+file_path = Get('filename')
+directory = os.path.dirname(file_path)
+py_path = os.path.join(directory, 'quickPy')
 
-py_scripts = os.listdir(py_path)
-py_scripts.remove('quickPy.py')
+if not os.path.exists(py_path):
+    Draw.PupMenu("'quickPy' folder does not exist.")
+else:
+    result = Draw.PupMenu("User Script Directory will be modifed?%t|OK|Cancel")
+    
+    if result == 1:
+        bpy.config.userScriptsDir = py_path
 
-if len(py_scripts) < 32:
-    for i in range(0, len(py_scripts)):
-        btn_text.append(py_scripts[i])
-        script_path.append(os.path.join(py_path, py_scripts[i]))
+        py_path = bpy.config.userScriptsDir
 
-# registering callbacks
-Draw.Register(gui, event, button_event)
+        py_scripts = [f for f in os.listdir(py_path) if f.endswith('.py')]
+
+        if len(py_scripts) < 32:
+            for i in range(0, len(py_scripts)):
+                btn_text.append(py_scripts[i])
+                script_path.append(os.path.join(py_path, py_scripts[i]))
+
+        # registering callbacks
+        Draw.Register(gui, event, button_event)
 
