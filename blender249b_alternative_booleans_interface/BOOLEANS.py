@@ -8,7 +8,7 @@ Tip: 'Alternative boolean operators.'
 """
 
 __bpydoc__ = """\
-These are mesh boolean alternatives to the builtin boolean operators.
+These are mesh boolean alternatives that can be used instead of the builtin boolean operators.
 """
 
 from Blender import *
@@ -279,42 +279,72 @@ def boolOp(boolOpType, newMeshName):
 
 def mCheck():
 
+	meshCheckMsg = "Mesh Check:"
+	
 	# change to object mode
 	in_editmode = Window.EditMode()
 	if in_editmode: Window.EditMode(0)
 
 	scene = bpy.data.scenes.active
 	
+	# check if an object is selected
 	if (len(scene.objects.selected) < 1):
-		print("Needs a mesh.")
+		meshCheckMsg += "|Needs a mesh."
+		Draw.PupMenu(meshCheckMsg)
 		return
 	
 	mesh = scene.objects.active
 	
+	# check if object has vertices
+	if not hasattr(mesh.getData(), 'verts'):
+		meshCheckMsg += "|Needs a mesh."
+		Draw.PupMenu(meshCheckMsg)
+		return
+	
 	coords = []
 	for v in mesh.getData().verts:
 		x, y, z = applyTrans(mesh, v[0], v[1], v[2])
+		print(v[0], v[1], v[2])
 		coords.append(x)
 		coords.append(y)
 		coords.append(z)
 	
+	facePt = [False]*(len(coords)//3)
 	tris = []
-	for f in mesh.getData().faces:
+	for f in mesh.getData().faces: # format data
 		if len(f.v) == 3:
+			facePt[f[0].index] = True
+			facePt[f[1].index] = True
+			facePt[f[2].index] = True
 			tris.append(f[0].index)
 			tris.append(f[1].index)
 			tris.append(f[2].index)
 		if len(f.v) == 4:
+			facePt[f[0].index] = True
+			facePt[f[1].index] = True
+			facePt[f[2].index] = True
+			facePt[f[3].index] = True
 			tris.append(f[0].index)
 			tris.append(f[1].index)
 			tris.append(f[2].index)
 			tris.append(f[0].index)
 			tris.append(f[2].index)
 			tris.append(f[3].index)
+	
+	# check for loose vertices
+	loose_pts = False
+	for pt in facePt:
+		if not pt:
+			loose_pts = True
+	
+	if (loose_pts):
+		meshCheckMsg += "|There exist vertices that are not a part of a face."
+		Draw.PupMenu(meshCheckMsg)
+		return
 
+	# check mesh with external library
 	checkVal = meshCheck(coords, tris)
 
-	meshCheckMsg = "Mesh Check:"
 	if (not checkVal&1):
 		meshCheckMsg += "|Failed the manifold test."
 
